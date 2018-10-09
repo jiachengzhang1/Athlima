@@ -19,7 +19,7 @@
         </activity>
         <activity
             android:name=".MainPage"
-            android:label="@string/title_activity_main_page"
+            android:label="MainPage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CreateEventPage" />
         <activity android:name=".MyEventsPage" />
