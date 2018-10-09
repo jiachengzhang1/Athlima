@@ -8,7 +8,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/signup_radiogroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -25,7 +25,7 @@
         app:layout_constraintVertical_bias="0.148">
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/signup_freshman"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Freshman"
@@ -33,7 +33,7 @@
             tools:layout_editor_absoluteY="79dp" />
 
         <RadioButton
-            android:id="@+id/radioButton4"
+            android:id="@+id/signup_sophmore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sophmore"
@@ -41,7 +41,7 @@
             tools:layout_editor_absoluteY="121dp" />
 
         <RadioButton
-            android:id="@+id/radioButton5"
+            android:id="@+id/signup_junior"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Junior"
@@ -49,21 +49,21 @@
             tools:layout_editor_absoluteY="164dp" />
 
         <RadioButton
-            android:id="@+id/radioButton6"
+            android:id="@+id/signup_senior"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Senior+"
+            android:text="Senior"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="205dp" />
 
         <RadioButton
-            android:id="@+id/radioButton7"
+            android:id="@+id/signup_grad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Grad School" />
 
         <RadioButton
-            android:id="@+id/radioButton8"
+            android:id="@+id/signup_phd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -71,7 +71,7 @@
     </RadioGroup>
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/signup_football"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -89,7 +89,7 @@
         app:layout_constraintVertical_bias="0.641" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/signup_soccer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -107,7 +107,7 @@
         app:layout_constraintVertical_bias="0.641" />
 
     <CheckBox
-        android:id="@+id/checkBox3"
+        android:id="@+id/signup_baseball"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -125,7 +125,7 @@
         app:layout_constraintVertical_bias="0.641" />
 
     <CheckBox
-        android:id="@+id/checkBox4"
+        android:id="@+id/signup_basketball"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -143,7 +143,7 @@
         app:layout_constraintVertical_bias="0.73" />
 
     <CheckBox
-        android:id="@+id/checkBox5"
+        android:id="@+id/signup_volleyball"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -161,7 +161,7 @@
         app:layout_constraintVertical_bias="0.73" />
 
     <CheckBox
-        android:id="@+id/checkBox6"
+        android:id="@+id/signup_frisbee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -179,7 +179,7 @@
         app:layout_constraintVertical_bias="0.73" />
 
     <CheckBox
-        android:id="@+id/checkBox7"
+        android:id="@+id/signup_tennis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -197,7 +197,7 @@
         app:layout_constraintVertical_bias="0.82" />
 
     <CheckBox
-        android:id="@+id/checkBox8"
+        android:id="@+id/signup_hockey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -215,7 +215,7 @@
         app:layout_constraintVertical_bias="0.82" />
 
     <CheckBox
-        android:id="@+id/checkBox9"
+        android:id="@+id/signup_golf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -246,12 +246,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/signUp1Back"
+        app:layout_constraintStart_toEndOf="@+id/signup_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/signUp1Back"
+        android:id="@+id/signup_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
