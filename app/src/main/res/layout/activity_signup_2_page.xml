@@ -233,7 +233,7 @@
         app:layout_constraintVertical_bias="0.82" />
 
     <Button
-        android:id="@+id/signUp1Next"
+        android:id="@+id/signup_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
