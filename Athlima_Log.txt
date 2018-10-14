@@ -1,0 +1,55 @@
+Project: Athlima
+Creators: Edwy(Qigang) Cai, Siyi Jiang, Aadam Kassam, Jiacheng Zhang
+Create Date: 09/26/2018
+
+-----------------------------------------------------------------------------------
+09/26/2018 (Project started)
+- Received email about requirements from customer
+
+-----------------------------------------------------------------------------------
+09/29/2018
+- Met with customer, discussed requirements and interface designs
+-----------------------------------------------------------------------------------
+10/05/2018
+- Started building database by mysql (Edwy)
+- Database demo data (Siyi)
+- Started developing user interface (Aadam, Jiacheng)
+
+-----------------------------------------------------------------------------------
+10/06/2018 (First iteration finished)
+- Finished basic frameworks of user interface (Aadam, Jiacheng)
+- Finished basic database (Edwy, Siyi)
+- Started server api by using node.js, express (Edwy, Jiacheng)
+- Run server on localhost successfully (Edwy)
+- Had trouble running server on Jiacheng's localhost (Jiacheng)
+
+-----------------------------------------------------------------------------------
+10/07/2018
+- Presentation/Demo of first iteration (Edwy, Siyi, Aadam, Jiachneg)
+- Plans for iteration 2 which includes connect to server, register/login, user info
+
+-----------------------------------------------------------------------------------
+10/13/2018
+- Detailed user interface (Aadam)
+	- Background added
+	- Theme color
+- Run server on localhost successfully (Jiacheng)
+- Built testing server on aws (Edwy, Siyi)
+- Android app can access to server (HttpURLConnection), 
+  and display JSON Object as string (Jiacheng)
+	Note: May need to change network security configuration in the future
+
+--- To Do List---
+1. App POST data to Server, and Server GET data
+2. App fetches data from Server
+3. Finish register
+4. Finish login
+5. Finish user info page
+
+
+
+
+
+
+
+
