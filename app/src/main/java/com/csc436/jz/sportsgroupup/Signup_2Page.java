@@ -54,7 +54,7 @@ public class Signup_2Page extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent startIntent = new Intent(getApplicationContext(), Signup_1Page.class);
                 startActivity(startIntent);
             }
         } );

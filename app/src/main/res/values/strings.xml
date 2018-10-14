@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SportsGroupUp</string>
+    <string name="app_name">Athlima</string>
     <string name="title_activity_events_page">eventsPage</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
