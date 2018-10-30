@@ -14,8 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Intent signInPage_intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,9 @@ public class MainPage extends AppCompatActivity
         setContentView(R.layout.activity_main_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        signInPage_intent = getIntent();
+        //ArrayList<String> userInfo = signInPage_intent.getStringArrayListExtra(MainActivity.USERINFO);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +79,7 @@ public class MainPage extends AppCompatActivity
 
         if (id == R.id.nav_user) {
             Intent startIntent = new Intent(getApplicationContext(), UserPage.class);
+            startIntent.putExtras(signInPage_intent.getExtras());
             startActivity(startIntent);
         } else if (id == R.id.nav_myEvents) {
             Intent startIntent = new Intent(getApplicationContext(), MyEventsPage.class);
