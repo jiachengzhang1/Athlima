@@ -16,7 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Signup_1Page extends AppCompatActivity {
-    String Email, Password, PasswordReendter, Name;
+    private String Email, Password, PasswordReendter, Name;
     public final static String EMAIL = "com.csc436.jz.sportsgroupup.EMAIL";
     public final static String PASSWORD = "com.csc436.jz.sportsgroupup.PASSWORD";
     public final static String NAME = "com.csc436.jz.sportsgroupup.NAME";
@@ -29,16 +29,14 @@ public class Signup_1Page extends AppCompatActivity {
         Button signUpNext = findViewById(R.id.signup_Next);
         Button signUpBack = findViewById(R.id.signup_back);
 
-
         signUpNext.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
-                EditText email = (EditText) findViewById(R.id.signup_email);
-                EditText password = (EditText) findViewById(R.id.signup_password_1);
-                EditText passwordReenter = (EditText) findViewById(R.id.signup_password_2);
-                EditText name = (EditText) findViewById(R.id.signup_name);
+                EditText email = findViewById(R.id.signup_email);
+                EditText password = findViewById(R.id.signup_password_1);
+                EditText passwordReenter = findViewById(R.id.signup_password_2);
+                EditText name = findViewById(R.id.signup_name);
 
                 Email = email.getText().toString();
                 Password = password.getText().toString();
@@ -48,8 +46,7 @@ public class Signup_1Page extends AppCompatActivity {
                 if (Password.compareTo(PasswordReendter) != 0) {
 
                 } else {
-                    //Intent startIntent = new Intent(getApplicationContext(), Signup_2Page.class);
-                    //startActivity(startIntent);
+
                     Intent intent = new Intent(Signup_1Page.this, Signup_2Page.class);
                     intent.putExtra(EMAIL, Email);
                     intent.putExtra(PASSWORD, Password);
@@ -68,40 +65,6 @@ public class Signup_1Page extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-
-    }
-
-    String path = "";
-
-    {
-        try {
-            URL url = new URL(path);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            connection.setConnectTimeout(5000);
-
-            connection.setRequestMethod("POST");
-
-            String data = "email=" + Email + "&password=" + Password + "&name=" + Name;
-            connection.setRequestProperty("Content_Tpye", "application/");
-
-            connection.setDoOutput(true);
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(data.getBytes());
-
-            int responseCode = connection.getResponseCode();
-      //      if(responseCode == 200) {
-       //         InputStream inputStream = connection.getInputStream();
-        //
-         //   } else {
-          //      return null;
-           // }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
