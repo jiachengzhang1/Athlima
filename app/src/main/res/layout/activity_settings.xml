@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/settingsLayout"
     tools:context=".Settings">
 
     <TextView
@@ -36,38 +37,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
-    <RadioGroup
-        android:layout_width="126dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="258dp"
-        android:layout_marginRight="258dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <Button
+        android:id="@+id/defaultColor"
+        android:layout_width="110dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="21dp"
+        android:text="Default"
+        app:layout_constraintEnd_toStartOf="@+id/blueColor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14">
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
-        <RadioButton
-            android:id="@+id/radioButton4"
-            android:layout_width="125dp"
-            android:layout_height="18dp"
-            android:layout_weight="1"
-            android:text="Default(White)" />
+    <Button
+        android:id="@+id/blueColor"
+        android:layout_width="110dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="124dp"
+        android:text="Blue"
+        app:layout_constraintStart_toEndOf="@+id/defaultColor"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <RadioButton
-            android:id="@+id/radioButton5"
-            android:layout_width="125dp"
-            android:layout_height="22dp"
-            android:layout_weight="1"
-            android:text="Blue" />
-
-        <RadioButton
-            android:id="@+id/radioButton6"
-            android:layout_width="match_parent"
-            android:layout_height="18dp"
-            android:layout_weight="1"
-            android:text="Red" />
-    </RadioGroup>
+    <Button
+        android:id="@+id/redColor"
+        android:layout_width="110dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="124dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:text="Red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/blueColor"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
