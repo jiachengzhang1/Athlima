@@ -47,6 +47,18 @@ router.get('/searchEvent=:name', function(req, res) {
 	});
 });
 
+//query by event id
+router.get('/searchEventById=id', function(req, res) {
+	//connection.connect();
+	connection.query("SELECT * FROM event WHERE id = ?", [req.params.id],function (err, result) {            
+		console.log('--------------------------SELECT----------------------------');       
+		console.log(result);       
+		console.log('------------------------------------------------------------\n\n');             
+		// connection.end();       
+		res.send(result); 
+	});
+});
+
 //query for all events
 router.get('/searchAllEvent', function(req, res) {
 	//connection.connect();
