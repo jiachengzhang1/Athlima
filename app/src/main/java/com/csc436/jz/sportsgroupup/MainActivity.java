@@ -32,8 +32,10 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     public final static String USERINFO = "com.csc436.jz.sportsgroupup.USERINFO";
+    public final static String EVENTLIST = "com.csc436.jz.sportsgroupup.EVENTLIST";
 
     private EditText username, password;
+    private Intent startIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,11 @@ public class MainActivity extends AppCompatActivity {
                 String username_str = username.getText().toString();
                 String password_str = password.getText().toString();
 
+                startIntent = new Intent(getApplicationContext(), MainPage.class);
+
                 String url = String.format("http://10.0.2.2:3000/get/loginUserName=\"%s\",pwd=%s",username_str,password_str);
                 new SigninTask().execute(url,"0");
+
                 url = "http://10.0.2.2:3000/get/searchAllEvent";
                 new SigninTask().execute(url,"1");
 
@@ -86,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     public class SigninTask extends AsyncTask<String, String, String> {
 
-        private Intent startIntent;
         private int flag;
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -120,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return content.toString();
 
-               // return null;
-
             } catch (MalformedURLException e) {
                 return e.toString();
             } catch (IOException e) {
@@ -147,15 +149,30 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            boolean loadUser = false;
+            boolean loadEvents = false;
+
             if(flag == 0) {
-                verifyAndGetUserInfo(result);
+                loadUser = verifyAndGetUserInfo(result);
             } else if (flag == 1) {
-                getAllEvents(result);
+
+                loadEvents = getAllEvents(result);
+                startActivity(startIntent);
             }
+/*
+            if (loadUser && loadEvents) {
+                startActivity(startIntent);
+            } else {
+                Toast.makeText(getApplicationContext(), "ERROR" + loadEvents + loadUser, Toast.LENGTH_LONG).show();
+                startActivity(startIntent);
+            }
+*/
+
         }
 
 
-        private void verifyAndGetUserInfo (String result) {
+        private boolean verifyAndGetUserInfo (String result) {
+            boolean status = false;
             String displayText = "";
             if (result != null) {
                 if (result == "") {
@@ -181,11 +198,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                         // share data to next activity and jump to the next page
-                        startIntent = new Intent(getApplicationContext(), MainPage.class);
 
                         startIntent.putExtra(USERINFO, userInfo);
 
-                        startActivity(startIntent);
+                        status = true;
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -197,36 +213,52 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Toast.makeText(getApplicationContext(), displayText, Toast.LENGTH_LONG).show();
+
+            return true;
         }
-        private void getAllEvents (String result) {
+
+        private boolean getAllEvents (String result) {
             JSONArray myJSONArray = null;
+
+
 
             try {
                 myJSONArray = new JSONArray(result);
                 ArrayList<Map<String, String>> eventList = new ArrayList<>();
+               // Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+              //  JSONObject object = new JSONObject(myJSONArray.get(0).toString());
+
+               // Toast.makeText(getApplicationContext(), , Toast.LENGTH_LONG).show();
+
+
                 for(int i = 0; i<myJSONArray.length(); i++) {
                     JSONObject object = new JSONObject(myJSONArray.get(i).toString());
 
                     // a map for each event
                     Map<String, String> event = new HashMap<>();
-                    event.put("title", object.getString(""));
-                    event.put("date", object.getString(""));
-                    event.put("time", object.getString(""));
-                    event.put("location", object.getString(""));
-                    event.put("skill", object.getString(""));
-                    event.put("description", object.getString(""));
-                    event.put("teamSize", object.getString(""));
+                    event.put("title", object.getString("name"));
+                    event.put("date", object.getString("date"));
+                    event.put("time", object.getString("time"));
+                    event.put("location", object.getString("location"));
+                    event.put("skill", object.getString("skill"));
+                    event.put("description", object.getString("description"));
+                    event.put("teamSize", object.getString("teamSize"));
 
                     // add event map into eventList
                     eventList.add(event);
                 }
 
+            //    Toast.makeText(getApplicationContext(), , Toast.LENGTH_LONG).show();
+
+                startIntent.putExtra(EVENTLIST,eventList);
+
+                return true;
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-
+            return true;
 
 
         }

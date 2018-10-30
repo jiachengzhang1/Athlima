@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainPage">
 
+    <TextView
+        android:id="@+id/mainpage_test"
+        android:layout_width="match_parent"
+        android:layout_height="229dp"
+        android:layout_weight="1"
+        android:text="TextView" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,6 +34,7 @@
             app:layout_anchorGravity="right">
 
         </SearchView>
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

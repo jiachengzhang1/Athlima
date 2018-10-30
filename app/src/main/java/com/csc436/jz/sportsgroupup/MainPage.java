@@ -13,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,6 +32,11 @@ public class MainPage extends AppCompatActivity
 
         signInPage_intent = getIntent();
         //ArrayList<String> userInfo = signInPage_intent.getStringArrayListExtra(MainActivity.USERINFO);
+        ArrayList<Map<String, String>> eventList = (ArrayList<Map<String, String>>) signInPage_intent.getSerializableExtra(MainActivity.EVENTLIST);
+
+        TextView test = findViewById(R.id.mainpage_test);
+        test.setText(eventList.toString());
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

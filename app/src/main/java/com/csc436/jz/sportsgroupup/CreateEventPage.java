@@ -1,5 +1,6 @@
 package com.csc436.jz.sportsgroupup;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -63,7 +64,7 @@ public class CreateEventPage extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month ++ ;
-                String date = month + "/" + dayOfMonth + "/" + year;
+                String date = month + "-" + dayOfMonth + "-" + year;
                 displayDate.setText(date);
             }
         };
@@ -75,9 +76,17 @@ public class CreateEventPage extends AppCompatActivity {
                 Snackbar createEventNotify = Snackbar.make(findViewById(R.id.eventPage), "Event Created", Snackbar.LENGTH_SHORT);
                 createEventNotify.show();
 
-             //   String url = String.format("http://10.0.2.2:3000/get/createUser=%s,pwd=%s,readName=%s,ps=%s,preferSport=%s,schoolYear=%s",
-             //           email, password, name, personalStatement, sports, schoolYear);
-             //   new CreateEventTask().execute(url);
+                String title_str = title.getText().toString();
+                String date_str = displayDate.getText().toString();
+                String time_str = "1234";
+                String location_str = location.getText().toString();
+                String description_str = description.getText().toString();
+                char skillLevel = 'a';
+                int size = 3;
+
+                String url = String.format("http://10.0.2.2:3000/get/createEvent=%s,date=%s,time=%s,location=%s,skill=%s,description=%s,teamSize=%d",
+                        title_str, date_str, time_str, location_str, skillLevel, description_str, size);
+                new CreateEventTask().execute(url);
 
 
 
