@@ -1,5 +1,6 @@
 package com.csc436.jz.sportsgroupup;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -23,9 +25,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    public final static String USERINFO = "com.csc436.jz.sportsgroupup.USERINFO";
 
     private EditText username, password;
 
@@ -43,8 +49,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                // new SigninTask().execute("http://10.0.2.2:3000/get/searchAllEvent");
-                Intent startIntent = new Intent(getApplicationContext(), MainPage.class);
-                startActivity(startIntent);
+                // /createEvent=:eventname,date=:date,time=:time,location=:loc,skill=:skill,description=:des,teamSize=:tsize
+
+                username = findViewById(R.id.usernameText);
+                password = findViewById(R.id.passwordText);
+                String username_str = username.getText().toString();
+                String password_str = password.getText().toString();
+
+                String url = String.format("http://10.0.2.2:3000/get/loginUserName=\"%s\",pwd=%s",username_str,password_str);
+                new SigninTask().execute(url,"0");
+                url = "http://10.0.2.2:3000/get/searchAllEvent";
+                new SigninTask().execute(url,"1");
+
             }
         });
 
@@ -54,17 +70,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), Signup_1Page.class);
                 startActivity(startIntent);
-            }
-        });
-
-        // test_button and test_view are testing internet connection
-        Button test_button = (Button) findViewById(R.id.test_button);
-        test_view = (TextView) findViewById(R.id.test_view);
-
-        test_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SigninTask().execute("http://10.0.2.2:3000/get/searchAllEvent");
             }
         });
     }
@@ -78,26 +83,26 @@ public class MainActivity extends AppCompatActivity {
      *
      */
     private TextView test_view;
+    @SuppressLint("StaticFieldLeak")
     public class SigninTask extends AsyncTask<String, String, String> {
+
+        private Intent startIntent;
+        private int flag;
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
-        protected String doInBackground(String... urls) {
+        protected String doInBackground(String... strings) {
             HttpURLConnection connection = null;
             BufferedReader bufferedReader = null;
 
             try {
-                URL url = new URL(urls[0]);
+                URL url = new URL(strings[0]);
 
-                // creating JSONObject
-                username = findViewById(R.id.usernameText);
-                password = findViewById(R.id.passwordText);
-                String post_username = username.getText().toString();
-                String post_password = password.getText().toString();
+                flag = Integer.parseInt(strings[1]);
 
+                connection = (HttpURLConnection) url.openConnection();
 
-                connection = (HttpURLConnection) url.openConnection ();
                 connection.setRequestMethod("GET");
                 StringBuilder content;
 
@@ -113,118 +118,119 @@ public class MainActivity extends AppCompatActivity {
                         content.append(System.lineSeparator());
                     }
                 }
+                return content.toString();
 
-                // decoding json object
-                JSONArray myJSONArray = new JSONArray(content.toString());
-                JSONObject object = new JSONObject(myJSONArray.get(0).toString());
-                String id =  object.getString("id");
-                String name =  object.getString("name");
-                String date =  object.getString("date");
-                String time =  object.getString("time");
-                String location =  object.getString("location");
-                String description =  object.getString("description");
-
-                String test_result = "id is " + id + "\n"
-                        + "name is " + name + "\n"
-                        + "date is " + date + "\n"
-                        + "time is " + time + "\n"
-                        + "location is " + location+ "\n"
-                        + "description is " + description;
-
-                return test_result;
-
-                /*
-                if (!post_username.isEmpty() && !post_password.isEmpty()) {
-                    JSONObject postDataParams = new JSONObject();
-                    postDataParams.put("email", post_username);
-                    postDataParams.put("password", post_password);
-                    Log.e("params", postDataParams.toString());
-
-
-                    // build connection to url
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setReadTimeout(15000);
-                    connection.setConnectTimeout(15000);
-                    connection.setRequestMethod("POST");
-                    connection.setDoInput(true);
-                    connection.setDoOutput(true);
-
-
-                    OutputStream outputStream = connection.getOutputStream();
-                    BufferedWriter bufferedWriter = new BufferedWriter(
-                            new OutputStreamWriter(outputStream, "UTF-8"));
-                    bufferedWriter.write(getPostDataString(postDataParams));
-                    bufferedWriter.flush();;
-                    bufferedWriter.close();
-                    outputStream.close();
-
-                    int responseCode = connection.getResponseCode();
-
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        bufferedReader = new BufferedReader(
-                                new InputStreamReader(connection.getInputStream()));
-                        StringBuffer stringBuffer = new StringBuffer("");
-                        String line = "";
-                        while((line = bufferedReader.readLine()) != null){
-                            stringBuffer.append(line);
-                            break;
-                        }
-                        bufferedReader.close();
-                        return bufferedReader.toString();
-                    } else {
-                        return new String("false :"+responseCode);
-                    }
-                } */
+               // return null;
 
             } catch (MalformedURLException e) {
                 return e.toString();
             } catch (IOException e) {
                 return e.toString();
-            }  catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if(connection != null) {
+                if (connection != null) {
                     connection.disconnect();
                 }
                 try {
-                    if(bufferedReader != null) {
+                    if (bufferedReader != null) {
                         bufferedReader.close();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            return null;
+            return "-1";
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            test_view.setText(result);
-            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
-            if(result != null) {
-                Intent startIntent = new Intent(getApplicationContext(), MainPage.class);
-                startActivity(startIntent);
+
+            if(flag == 0) {
+                verifyAndGetUserInfo(result);
+            } else if (flag == 1) {
+                getAllEvents(result);
             }
         }
-    }
-/*
-    public String getPostDataString(JSONObject params) throws Exception {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
 
-        Iterator<String> itr = params.keys();
-        while(itr.hasNext()) {
-            String key = itr.next();
-            Object value = params.get(key);
-            if (first) first = false;
-            else result.append("&");
-            result.append(URLEncoder.encode(key, "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
+        private void verifyAndGetUserInfo (String result) {
+            String displayText = "";
+            if (result != null) {
+                if (result == "") {
+                    displayText = "Email or password doesn't match the record.";
+                } else {
+                    // decoding json object
+                    JSONArray myJSONArray = null;
+                    try {
+                        myJSONArray = new JSONArray(result);
+                        JSONObject object = new JSONObject(myJSONArray.get(0).toString());
+
+                        ArrayList<String> userInfo = new ArrayList<String>();
+
+                        userInfo.add(object.getString("id"));
+                        userInfo.add(object.getString("emailAddress"));
+                        userInfo.add(object.getString("password"));
+                        userInfo.add(object.getString("schoolYear"));
+                        userInfo.add(object.getString("prefer_sport"));
+                        userInfo.add(object.getString("ps"));
+                        userInfo.add(object.getString("readName"));
+
+                        displayText = "Login Successfully.";
+
+
+                        // share data to next activity and jump to the next page
+                        startIntent = new Intent(getApplicationContext(), MainPage.class);
+
+                        startIntent.putExtra(USERINFO, userInfo);
+
+                        startActivity(startIntent);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } else {
+                displayText = "Server or connection issues.";
+            }
+
+            Toast.makeText(getApplicationContext(), displayText, Toast.LENGTH_LONG).show();
         }
-        return result.toString();
+        private void getAllEvents (String result) {
+            JSONArray myJSONArray = null;
+
+            try {
+                myJSONArray = new JSONArray(result);
+                ArrayList<Map<String, String>> eventList = new ArrayList<>();
+                for(int i = 0; i<myJSONArray.length(); i++) {
+                    JSONObject object = new JSONObject(myJSONArray.get(i).toString());
+
+                    // a map for each event
+                    Map<String, String> event = new HashMap<>();
+                    event.put("title", object.getString(""));
+                    event.put("date", object.getString(""));
+                    event.put("time", object.getString(""));
+                    event.put("location", object.getString(""));
+                    event.put("skill", object.getString(""));
+                    event.put("description", object.getString(""));
+                    event.put("teamSize", object.getString(""));
+
+                    // add event map into eventList
+                    eventList.add(event);
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+        }
+
     }
-    */
 
 }
