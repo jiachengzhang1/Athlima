@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 startIntent = new Intent(getApplicationContext(), MainPage.class);
 
                 // verifying and getting user information
-                String url = String.format("%s:3000/get/loginUserName=\"%s\",pwd=%s",
+                String url = String.format("%s:3000/get/loginUserName=\"%s\",pwd=\"%s\"",
                         com.csc436.jz.sportsgroupup.URL.Address.url, username_str,password_str);
                 new SigninTask().execute(url,"0");
 
