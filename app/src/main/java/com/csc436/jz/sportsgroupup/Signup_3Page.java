@@ -61,10 +61,13 @@ public class Signup_3Page extends AppCompatActivity {
 
             @Override
             public void onClick(View v){
-                EditText personalStatement_view = (EditText) findViewById(R.id.personalStatement);
+                EditText personalStatement_view = findViewById(R.id.personalStatement);
                 personalStatement = personalStatement_view.getText().toString();
-                String url = String.format("http://10.0.2.2:3000/get/createUser=%s,pwd=%s,readName=%s,ps=%s,preferSport=%s,schoolYear=%s",
-                        email, password, name, personalStatement, sports, schoolYear);
+                if(personalStatement.equals("")){
+                    personalStatement = " ";
+                }
+                String url = String.format("%s:3000/get/createUser=%s,pwd=%s,readName=%s,ps=%s,preferSport=%s,schoolYear=%s",
+                        com.csc436.jz.sportsgroupup.URL.Address.url, email, password, name, personalStatement, sports, schoolYear);
                 new SignupTask().execute(url);
             }
         } );

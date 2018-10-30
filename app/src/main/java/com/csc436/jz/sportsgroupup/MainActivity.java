@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText username, password;
     private Intent startIntent;
+    private boolean loadUser = false;
+    private boolean loadEvents = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
                 startIntent = new Intent(getApplicationContext(), MainPage.class);
 
-                String url = String.format("http://10.0.2.2:3000/get/loginUserName=\"%s\",pwd=%s",username_str,password_str);
+                // verifying and getting user information
+                String url = String.format("%s:3000/get/loginUserName=\"%s\",pwd=\"%s\"",
+                        com.csc436.jz.sportsgroupup.URL.Address.url, username_str,password_str);
                 new SigninTask().execute(url,"0");
 
-                url = "http://10.0.2.2:3000/get/searchAllEvent";
+                // get all events from server
+                url = com.csc436.jz.sportsgroupup.URL.Address.url + ":3000/get/searchAllEvent";
                 new SigninTask().execute(url,"1");
 
             }
@@ -90,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView test_view;
     @SuppressLint("StaticFieldLeak")
     public class SigninTask extends AsyncTask<String, String, String> {
-
         private int flag;
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -149,35 +153,24 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            boolean loadUser = false;
-            boolean loadEvents = false;
-
             if(flag == 0) {
                 loadUser = verifyAndGetUserInfo(result);
             } else if (flag == 1) {
-
                 loadEvents = getAllEvents(result);
-                startActivity(startIntent);
+                if (loadUser && loadEvents) {
+                    Toast.makeText(getApplicationContext(), "Login Successfully", Toast.LENGTH_LONG).show();
+                    startActivity(startIntent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "ERROR" + loadEvents + loadUser, Toast.LENGTH_LONG).show();
+                }
             }
-/*
-            if (loadUser && loadEvents) {
-                startActivity(startIntent);
-            } else {
-                Toast.makeText(getApplicationContext(), "ERROR" + loadEvents + loadUser, Toast.LENGTH_LONG).show();
-                startActivity(startIntent);
-            }
-*/
-
         }
-
 
         private boolean verifyAndGetUserInfo (String result) {
             boolean status = false;
-            String displayText = "";
             if (result != null) {
-                if (result == "") {
-                    displayText = "Email or password doesn't match the record.";
-                } else {
+                if (result == "") {}
+                else {
                     // decoding json object
                     JSONArray myJSONArray = null;
                     try {
@@ -194,11 +187,7 @@ public class MainActivity extends AppCompatActivity {
                         userInfo.add(object.getString("ps"));
                         userInfo.add(object.getString("readName"));
 
-                        displayText = "Login Successfully.";
-
-
                         // share data to next activity and jump to the next page
-
                         startIntent.putExtra(USERINFO, userInfo);
 
                         status = true;
@@ -208,28 +197,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-            } else {
-                displayText = "Server or connection issues.";
-            }
-
-            Toast.makeText(getApplicationContext(), displayText, Toast.LENGTH_LONG).show();
-
-            return true;
+            } else { }
+            return status;
         }
 
         private boolean getAllEvents (String result) {
             JSONArray myJSONArray = null;
 
-
-
             try {
                 myJSONArray = new JSONArray(result);
                 ArrayList<Map<String, String>> eventList = new ArrayList<>();
-               // Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-              //  JSONObject object = new JSONObject(myJSONArray.get(0).toString());
-
-               // Toast.makeText(getApplicationContext(), , Toast.LENGTH_LONG).show();
-
 
                 for(int i = 0; i<myJSONArray.length(); i++) {
                     JSONObject object = new JSONObject(myJSONArray.get(i).toString());
@@ -248,8 +225,6 @@ public class MainActivity extends AppCompatActivity {
                     eventList.add(event);
                 }
 
-            //    Toast.makeText(getApplicationContext(), , Toast.LENGTH_LONG).show();
-
                 startIntent.putExtra(EVENTLIST,eventList);
 
                 return true;
@@ -257,10 +232,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            return true;
-
-
+            return false;
         }
 
     }

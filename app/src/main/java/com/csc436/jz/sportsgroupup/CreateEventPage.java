@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
@@ -76,6 +77,7 @@ public class CreateEventPage extends AppCompatActivity {
                 Snackbar createEventNotify = Snackbar.make(findViewById(R.id.eventPage), "Event Created", Snackbar.LENGTH_SHORT);
                 createEventNotify.show();
 
+                // getting user inputs
                 String title_str = title.getText().toString();
                 String date_str = displayDate.getText().toString();
                 String time_str = "1234";
@@ -84,11 +86,10 @@ public class CreateEventPage extends AppCompatActivity {
                 char skillLevel = 'a';
                 int size = 3;
 
-                String url = String.format("http://10.0.2.2:3000/get/createEvent=%s,date=%s,time=%s,location=%s,skill=%s,description=%s,teamSize=%d",
-                        title_str, date_str, time_str, location_str, skillLevel, description_str, size);
+//http://10.0.2.2
+                String url = String.format("%s:3000/get/createEvent=%s,date=%s,time=%s,location=%s,skill=%s,description=%s,teamSize=%d",
+                        com.csc436.jz.sportsgroupup.URL.Address.url, title_str, date_str, time_str, location_str, skillLevel, description_str, size);
                 new CreateEventTask().execute(url);
-
-
 
                 Intent intent = new Intent(getApplicationContext(), MainPage.class);
                 startActivity(intent);
