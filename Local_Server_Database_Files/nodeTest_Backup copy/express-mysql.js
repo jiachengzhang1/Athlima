@@ -6,7 +6,7 @@ var connection = mysql.createConnection({   //config your local database
 host     : 'localhost',  
 user     : 'root',  
 password : 'root',  
-database : 'db1'
+database : 'db'
 });
 connection.connect();  //keep connectting
 var server = app.listen(3000, function () {  
