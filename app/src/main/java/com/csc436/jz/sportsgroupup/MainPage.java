@@ -2,6 +2,7 @@ package com.csc436.jz.sportsgroupup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -13,6 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,8 +40,16 @@ public class MainPage extends AppCompatActivity
         //ArrayList<String> userInfo = signInPage_intent.getStringArrayListExtra(MainActivity.USERINFO);
         ArrayList<Map<String, String>> eventList = (ArrayList<Map<String, String>>) signInPage_intent.getSerializableExtra(MainActivity.EVENTLIST);
 
-        TextView test = findViewById(R.id.mainpage_test);
-        test.setText(eventList.toString());
+        ScrollView test1 = (ScrollView) findViewById(R.id.scrollViewMain);
+        ScrollView.LayoutParams param = new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT, ScrollView.LayoutParams.WRAP_CONTENT);
+        for(int i = 0; i < eventList.size(); i++){
+            Button textAdd = new Button(this);
+
+            textAdd.setText(eventList.get(i).get("title") +  " " + eventList.get(i).get("date"));
+
+            test1.addView(textAdd, param);
+
+        }
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
