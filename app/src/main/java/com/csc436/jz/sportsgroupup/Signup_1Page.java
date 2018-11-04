@@ -20,7 +20,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Signup_1Page extends AppCompatActivity {
-    private String Email, Password, PasswordReendter, Name;
+    private String Email, Password, PasswordReenter, Name;
     public final static String EMAIL = "com.csc436.jz.sportsgroupup.EMAIL";
     public final static String PASSWORD = "com.csc436.jz.sportsgroupup.PASSWORD";
     public final static String NAME = "com.csc436.jz.sportsgroupup.NAME";
@@ -44,11 +44,19 @@ public class Signup_1Page extends AppCompatActivity {
 
                 Email = email.getText().toString();
                 Password = password.getText().toString();
-                PasswordReendter = passwordReenter.getText().toString();
+                PasswordReenter = passwordReenter.getText().toString();
                 Name = name.getText().toString();
 
-                if (Password.compareTo(PasswordReendter) != 0) {
-
+                if(Email.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Enter an email address to register", Toast.LENGTH_LONG).show();
+                } else if (Password.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Don't forget enter a password", Toast.LENGTH_LONG).show();
+                }  else if ( !Password.equals(PasswordReenter) ) {
+                    Toast.makeText(getApplicationContext(), "Two passwords don't match", Toast.LENGTH_LONG).show();
+                } else if (Name.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter your name", Toast.LENGTH_LONG).show();
+                } else if( !checkEmail()) {
+                    Toast.makeText(getApplicationContext(), "Please enter your Catmail", Toast.LENGTH_LONG).show();
                 } else {
 
                     Password = Password_Hash.SHA1(Password);
@@ -77,6 +85,17 @@ public class Signup_1Page extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean checkEmail () {
+
+        if(Email.length() > 19) {
+            String address = Email.substring(Email.length()-18,Email.length());
+            //Toast.makeText(getApplicationContext(), address, Toast.LENGTH_LONG).show();
+            if(address.equals("@email.arizona.edu"))
+                return true;
+        }
+        return false;
     }
 
 }
