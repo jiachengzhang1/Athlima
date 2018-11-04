@@ -2,10 +2,12 @@ package com.csc436.jz.sportsgroupup;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -215,22 +217,20 @@ public class MainPage extends AppCompatActivity
                 LinearLayout test1 = findViewById(R.id.scrollViewMain);
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 for (int i = 0; i < eventList.size(); i++) {
-                    Button textAdd = new Button(getApplicationContext());
-
+                    ConstraintLayout textAdd = new ConstraintLayout(getApplicationContext());
+                    TextView title = new TextView(getApplicationContext());
+                    title.setText("Title: " + eventList.get(i).get("title") +
+                            "\nDate: " + eventList.get(i).get("date") +
+                            "\nLocation: " + eventList.get(i).get("Location") +
+                            "\nDescription: " + eventList.get(i).get("Description") +"\n\n");
                     Map<String, String> temp = eventList.get(i);
                     int eventID = -1;
 
                     if (temp != null && temp.get("id") != null) {
                         eventID = Integer.parseInt(temp.get("id"));
-                        textAdd.setText(eventList.get(i).get("title") + " " + eventList.get(i).get("date"));
+                        textAdd.addView(title, param);
 
                         final int finalEventID = eventID;
-                        textAdd.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
 
 
                         test1.addView(textAdd, param);
