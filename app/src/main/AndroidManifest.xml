@@ -29,7 +29,8 @@
         <activity android:name=".Signup_1Page" />
         <activity android:name=".Signup_2Page" />
         <activity android:name=".Signup_3Page" />
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Settings" />
+        <activity android:name=".ShowPopUp"></activity>
     </application>
 
 </manifest>
