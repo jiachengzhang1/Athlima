@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Signup_1Page extends AppCompatActivity {
     private String Email, Password, PasswordReendter, Name;
@@ -47,14 +51,18 @@ public class Signup_1Page extends AppCompatActivity {
 
                 } else {
 
-                    // hashing passward
+                    Password = Password_Hash.SHA1(Password);
 
+                    if(Password != null) {
+                        Intent intent = new Intent(Signup_1Page.this, Signup_2Page.class);
+                        intent.putExtra(EMAIL, Email);
+                        intent.putExtra(PASSWORD, Password);
+                        intent.putExtra(NAME, Name);
+                        startActivity(intent);
 
-                    Intent intent = new Intent(Signup_1Page.this, Signup_2Page.class);
-                    intent.putExtra(EMAIL, Email);
-                    intent.putExtra(PASSWORD, Password);
-                    intent.putExtra(NAME, Name);
-                    startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Security system failed", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

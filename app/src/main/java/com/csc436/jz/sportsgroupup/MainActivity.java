@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 username = findViewById(R.id.usernameText);
                 password = findViewById(R.id.passwordText);
                 String username_str = username.getText().toString();
-                String password_str = password.getText().toString();
+                String password_str = Password_Hash.SHA1(password.getText().toString());
 
                 startIntent = new Intent(getApplicationContext(), MainPage.class);
 
