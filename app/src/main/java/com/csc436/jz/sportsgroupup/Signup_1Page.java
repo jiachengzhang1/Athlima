@@ -47,6 +47,9 @@ public class Signup_1Page extends AppCompatActivity {
 
                 } else {
 
+                    // hashing passward
+
+
                     Intent intent = new Intent(Signup_1Page.this, Signup_2Page.class);
                     intent.putExtra(EMAIL, Email);
                     intent.putExtra(PASSWORD, Password);

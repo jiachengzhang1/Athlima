@@ -1,7 +1,11 @@
 package com.csc436.jz.sportsgroupup;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,44 +24,46 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MainPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Intent signInPage_intent;
+    private Intent signInPage_intent;
+    private ArrayList<Map<String, String>> eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         signInPage_intent = getIntent();
-        //ArrayList<String> userInfo = signInPage_intent.getStringArrayListExtra(MainActivity.USERINFO);
-        ArrayList<Map<String, String>> eventList = (ArrayList<Map<String, String>>) signInPage_intent.getSerializableExtra(MainActivity.EVENTLIST);
 
-        ScrollView test1 = (ScrollView) findViewById(R.id.scrollViewMain);
-        ScrollView.LayoutParams param = new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT, ScrollView.LayoutParams.WRAP_CONTENT);
-        for(int i = 0; i < eventList.size(); i++){
-            Button textAdd = new Button(this);
-
-            textAdd.setText(eventList.get(i).get("title") +  " " + eventList.get(i).get("date"));
-
-            test1.addView(textAdd, param);
-
-        }
+        // access to the internet in order to get the events information
+        String url = com.csc436.jz.sportsgroupup.URL.Address.url + ":3000/get/searchAllEvent";
+        new GetEventTask().execute(url);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                createEvent();
             }
         });
 
@@ -106,8 +112,7 @@ public class MainPage extends AppCompatActivity
             Intent startIntent = new Intent(getApplicationContext(), MyEventsPage.class);
             startActivity(startIntent);
         } else if (id == R.id.nav_createEvent) {
-            Intent startIntent = new Intent(getApplicationContext(), CreateEventPage.class);
-            startActivity(startIntent);
+            createEvent();
         } else if (id == R.id.nav_setting) {
 
         }
@@ -116,4 +121,132 @@ public class MainPage extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void createEvent () {
+        Intent startIntent = new Intent(getApplicationContext(), CreateEventPage.class);
+        startActivity(startIntent);
+    }
+
+    public class GetEventTask extends AsyncTask<String, String, String> {
+
+        @TargetApi(Build.VERSION_CODES.KITKAT)
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        protected String doInBackground(String... urls) {
+            HttpURLConnection connection = null;
+            BufferedReader bufferedReader = null;
+
+            try {
+                java.net.URL url = new java.net.URL(urls[0]);
+
+                connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("GET");
+                StringBuilder content;
+
+                // read input stream
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+
+                    String line;
+                    content = new StringBuilder();
+
+                    while ((line = in.readLine()) != null) {
+                        content.append(line);
+                        content.append(System.lineSeparator());
+                    }
+                }
+                return content.toString();
+
+            } catch (MalformedURLException e) {
+                return e.toString();
+            } catch (IOException e) {
+                return e.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (bufferedReader != null) {
+                        bufferedReader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            boolean loadEvents = getAllEvents(result);
+            if( !loadEvents ) {
+                Toast.makeText(getApplicationContext(), "Server error for loading events", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        private boolean getAllEvents (String result) {
+            JSONArray myJSONArray = null;
+
+            try {
+                myJSONArray = new JSONArray(result);
+                eventList = new ArrayList<>();
+
+                for(int i = 0; i<myJSONArray.length(); i++) {
+                    JSONObject object = new JSONObject(myJSONArray.get(i).toString());
+
+                    // a map for each event
+                    Map<String, String> event = new HashMap<>();
+                    event.put("id", object.getString("id"));
+                    event.put("title", object.getString("name"));
+                    event.put("date", object.getString("date"));
+                    event.put("time", object.getString("time"));
+                    event.put("location", object.getString("location"));
+                    event.put("skill", object.getString("skill"));
+                    event.put("description", object.getString("description"));
+                    event.put("teamSize", object.getString("teamSize"));
+
+                    // add event map into eventList
+                    eventList.add(event);
+                }
+                LinearLayout test1 = findViewById(R.id.scrollViewMain);
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                for (int i = 0; i < eventList.size(); i++) {
+                    Button textAdd = new Button(getApplicationContext());
+
+                    Map<String, String> temp = eventList.get(i);
+                    int eventID = -1;
+
+                    if (temp != null && temp.get("id") != null) {
+                        eventID = Integer.parseInt(temp.get("id"));
+                        textAdd.setText(eventList.get(i).get("title") + " " + eventList.get(i).get("date"));
+
+                        final int finalEventID = eventID;
+                        textAdd.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+
+
+                        test1.addView(textAdd, param);
+
+                    }
+
+                }
+
+                return true;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+    }
+
 }

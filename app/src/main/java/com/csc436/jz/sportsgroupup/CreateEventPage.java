@@ -86,7 +86,6 @@ public class CreateEventPage extends AppCompatActivity {
                 char skillLevel = 'a';
                 int size = 3;
 
-//http://10.0.2.2
                 String url = String.format("%s:3000/get/createEvent=%s,date=%s,time=%s,location=%s,skill=%s,description=%s,teamSize=%d",
                         com.csc436.jz.sportsgroupup.URL.Address.url, title_str, date_str, time_str, location_str, skillLevel, description_str, size);
                 new CreateEventTask().execute(url);
@@ -127,8 +126,6 @@ public class CreateEventPage extends AppCompatActivity {
                     connection.disconnect();
                 }
             }
-
-
             return null;
         }
     }

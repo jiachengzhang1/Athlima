@@ -36,24 +36,19 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText username, password;
     private Intent startIntent;
-    private boolean loadUser = false;
-    private boolean loadEvents = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button login = (Button) findViewById(R.id.loginButton);
-        Button signup = (Button) findViewById(R.id.signupButton);
+        Button login = findViewById(R.id.loginButton);
+        Button signup = findViewById(R.id.signupButton);
 
         // click login button
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               // new SigninTask().execute("http://10.0.2.2:3000/get/searchAllEvent");
-                // /createEvent=:eventname,date=:date,time=:time,location=:loc,skill=:skill,description=:des,teamSize=:tsize
 
                 username = findViewById(R.id.usernameText);
                 password = findViewById(R.id.passwordText);
@@ -63,13 +58,9 @@ public class MainActivity extends AppCompatActivity {
                 startIntent = new Intent(getApplicationContext(), MainPage.class);
 
                 // verifying and getting user information
-                String url = String.format("%s:3000/get/loginUserName=\"%s\",pwd=\"%s\"",
+                String url = String.format("%s:3000/get/loginUserName=%s,pwd=%s",
                         com.csc436.jz.sportsgroupup.URL.Address.url, username_str,password_str);
-                new SigninTask().execute(url,"0");
-
-                // get all events from server
-                url = com.csc436.jz.sportsgroupup.URL.Address.url + ":3000/get/searchAllEvent";
-                new SigninTask().execute(url,"1");
+                new SigninTask().execute(url);
 
             }
         });
@@ -95,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView test_view;
     @SuppressLint("StaticFieldLeak")
     public class SigninTask extends AsyncTask<String, String, String> {
-        private int flag;
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -106,8 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 URL url = new URL(strings[0]);
-
-                flag = Integer.parseInt(strings[1]);
 
                 connection = (HttpURLConnection) url.openConnection();
 
@@ -152,17 +140,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
-            if(flag == 0) {
-                loadUser = verifyAndGetUserInfo(result);
-            } else if (flag == 1) {
-                loadEvents = getAllEvents(result);
-                if (loadUser && loadEvents) {
-                    Toast.makeText(getApplicationContext(), "Login Successfully", Toast.LENGTH_LONG).show();
-                    startActivity(startIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "ERROR" + loadEvents + loadUser, Toast.LENGTH_LONG).show();
-                }
+            boolean loadUser = verifyAndGetUserInfo(result);
+            if (loadUser) {
+                Toast.makeText(getApplicationContext(), "Login Successfully", Toast.LENGTH_LONG).show();
+                startActivity(startIntent);
+            } else {
+                Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -199,40 +182,6 @@ public class MainActivity extends AppCompatActivity {
 
             } else { }
             return status;
-        }
-
-        private boolean getAllEvents (String result) {
-            JSONArray myJSONArray = null;
-
-            try {
-                myJSONArray = new JSONArray(result);
-                ArrayList<Map<String, String>> eventList = new ArrayList<>();
-
-                for(int i = 0; i<myJSONArray.length(); i++) {
-                    JSONObject object = new JSONObject(myJSONArray.get(i).toString());
-
-                    // a map for each event
-                    Map<String, String> event = new HashMap<>();
-                    event.put("title", object.getString("name"));
-                    event.put("date", object.getString("date"));
-                    event.put("time", object.getString("time"));
-                    event.put("location", object.getString("location"));
-                    event.put("skill", object.getString("skill"));
-                    event.put("description", object.getString("description"));
-                    event.put("teamSize", object.getString("teamSize"));
-
-                    // add event map into eventList
-                    eventList.add(event);
-                }
-
-                startIntent.putExtra(EVENTLIST,eventList);
-
-                return true;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return false;
         }
 
     }
