@@ -8,6 +8,21 @@ password : 'root',
 database : 'db'  
 });
 
+// hashcode for encoding and decoding password
+String.prototype.hashCode = function(){
+    var hash = 0;
+    if (this.length == 0) 
+    	return hash;
+
+    for (i = 0; i < this.length; i++) {
+        char = this.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+	return hash;
+}
+
+
 // router middle side
 router.use(function timeLog(req, res, next) {  
 	console.log('Time: ', Date.now());  //get current time  
@@ -116,7 +131,8 @@ connection.query(sql,function (err, result) {
 
 //login by account and password
 router.get('/loginUserName=:username,pwd=:pwd', function(req, res) {
-    connection.query("SELECT * FROM user WHERE emailAddress = ? and password = ?", [req.params.username, req.params.pwd], function (err, result) {
+	console.log("Original password is : " + req.params.pwd);
+    connection.query("SELECT * FROM user WHERE emailAddress = ? and password = ?", [req.params.username, req.params.pwd.hashCode()], function (err, result) {
 		console.log(result);        
         res.send(result);
     });
@@ -124,8 +140,9 @@ router.get('/loginUserName=:username,pwd=:pwd', function(req, res) {
 
 //register as new user
 router.get('/createUser=:username,pwd=:pwd,readName=:name,ps=:ps,preferSport=:prefer,schoolYear=:year',function(req,res){
+	console.log("Original password is : " + req.params.pwd);
 	 connection.query("INSERT INTO user (password,readName,emailAddress,ps,prefer_sport,schoolYear) VALUES (?,?,?,?,?,?)", 
-	 	[req.params.pwd, req.params.name, req.params.username, req.params.ps, req.params.prefer, req.params.year],
+	 	[req.params.pwd.hashCode(), req.params.name, req.params.username, req.params.ps, req.params.prefer, req.params.year],
 	 	function(err, result){
 			var checkStatus = {"boolean":true};
 	 		if(err){
@@ -209,6 +226,15 @@ router.get('/deleteEventById=:id', function(req,res){
 	});
 });
 
+//set user images
+router.get('/setImageUser=:email,pic=*', function(req, res) {
+	connection.query("UPDATE user SET PicURL = ? WHERE emailAddress = ?", [req.param(0), req.params.email], function (err, result) { 
+		console.log('--------------------------SELECT----------------------------');       
+		console.log(result);       
+		console.log('------------------------------------------------------------\n\n');  
+		res.send(result); 
+	});
+});
 
 module.exports = router;
 
