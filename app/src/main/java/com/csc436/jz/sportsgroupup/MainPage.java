@@ -215,20 +215,28 @@ public class MainPage extends AppCompatActivity
                     eventList.add(event);
                 }
                 LinearLayout test1 = findViewById(R.id.scrollViewMain);
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 for (int i = 0; i < eventList.size(); i++) {
                     ConstraintLayout textAdd = new ConstraintLayout(getApplicationContext());
+                    Button but = new Button(getApplicationContext());
+                    but.setText("Join");
+                    but.setHeight(50);
+                    but.setWidth(200);
+                    but.setX(600);
+                    but.setY(100);
                     TextView title = new TextView(getApplicationContext());
                     title.setText("Title: " + eventList.get(i).get("title") +
                             "\nDate: " + eventList.get(i).get("date") +
                             "\nLocation: " + eventList.get(i).get("Location") +
                             "\nDescription: " + eventList.get(i).get("Description") +"\n\n");
+
                     Map<String, String> temp = eventList.get(i);
                     int eventID = -1;
 
                     if (temp != null && temp.get("id") != null) {
                         eventID = Integer.parseInt(temp.get("id"));
                         textAdd.addView(title, param);
+                        textAdd.addView(but);
 
                         final int finalEventID = eventID;
 
