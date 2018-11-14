@@ -236,5 +236,35 @@ router.get('/setImageUser=:email,pic=*', function(req, res) {
 	});
 });
 
+//join event
+router.get('/joinEvent=:id,user=:email', function(req, res) {
+	var eventlist;
+	connection.query("SELECT event_id from user WHERE emailAddress = ?", [req.params.email], function (err,result){
+		eventlist = result[0].event_id;
+		if (eventlist == undefined){
+			eventlist = "_";
+		}
+		eventlist += req.params.id + "_";
+
+		connection.query("UPDATE user SET event_id = ? WHERE emailAddress = ?", [eventlist, req.params.email], function (err, result) { 
+			console.log('--------------------------SELECT----------------------------');       
+			console.log(result);       
+			console.log('------------------------------------------------------------\n\n');  
+			res.send(result); 
+		});
+	});
+});
+
+//show all attendees
+router.get('/attendee=:eventId', function(req, res) {
+	var query = "SELECT * from user WHERE event_id LIKE '%\\_" + req.params.eventId + "\\_%'";
+	connection.query(query, function (err,result){
+		console.log('--------------------------SELECT----------------------------');       
+		console.log(result);       
+		console.log('------------------------------------------------------------\n\n');  
+		res.send(result); 
+	});
+});
+
 module.exports = router;
 
