@@ -158,9 +158,9 @@ router.get('/createUser=:username,pwd=:pwd,readName=:name,ps=:ps,preferSport=:pr
 });
 
 //create a new event
-router.get('/createEvent=:eventname,date=:date,time=:time,location=:loc,skill=:skill,description=:des,teamSize=:tsize', function(req,res){
-	connection.query("INSERT INTO event (name,date,time,location,skill,description,teamSize) VALUES (?,?,?,?,?,?,?)",
-		[req.params.eventname, req.params.date, req.params.time, req.params.loc, req.params.skill, req.params.des, req.params.tsize],
+router.get('/createEvent=:eventname,date=:date,time=:time,location=:loc,skill=:skill,description=:des,teamSize=:tsize, ownerUserId:=owner', function(req,res){
+	connection.query("INSERT INTO event (name,date,time,location,skill,description,teamSize,owner) VALUES (?,?,?,?,?,?,?,?)",
+		[req.params.eventname, req.params.date, req.params.time, req.params.loc, req.params.skill, req.params.des, req.params.tsize, req.params.owner],
 		function(err, result){
 			var checkStatus = {"boolean":true};
 	 		if(err){
@@ -238,12 +238,22 @@ router.get('/setImageUser=:email,pic=*', function(req, res) {
 
 //join event
 router.get('/joinEvent=:id,user=:email', function(req, res) {
-	var eventlist;
 	connection.query("SELECT event_id from user WHERE emailAddress = ?", [req.params.email], function (err,result){
+		var eventlist;
 		eventlist = result[0].event_id;
 		if (eventlist == undefined){
 			eventlist = "_";
 		}
+
+		var reg = new RegExp("_" + req.params.id + "_")
+		if (eventlist.match(reg)){
+			console.log('--------------------------ERROR-----------------------------');
+			console.log("join event twice");
+			console.log('------------------------------------------------------------\n\n');  
+			res.send(result);
+			return;
+		}
+
 		eventlist += req.params.id + "_";
 
 		connection.query("UPDATE user SET event_id = ? WHERE emailAddress = ?", [eventlist, req.params.email], function (err, result) { 
@@ -257,7 +267,7 @@ router.get('/joinEvent=:id,user=:email', function(req, res) {
 
 //show all attendees
 router.get('/attendee=:eventId', function(req, res) {
-	var query = "SELECT * from user WHERE event_id LIKE '%\\_" + req.params.eventId + "\\_%'";
+	var query = "SELECT readName from user WHERE event_id LIKE '%\\_" + req.params.eventId + "\\_%'";
 	connection.query(query, function (err,result){
 		console.log('--------------------------SELECT----------------------------');       
 		console.log(result);       
