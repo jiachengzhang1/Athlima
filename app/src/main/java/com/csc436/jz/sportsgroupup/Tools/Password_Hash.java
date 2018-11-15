@@ -1,4 +1,4 @@
-package com.csc436.jz.sportsgroupup;
+package com.csc436.jz.sportsgroupup.Tools;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
