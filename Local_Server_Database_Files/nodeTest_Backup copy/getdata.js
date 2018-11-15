@@ -276,5 +276,27 @@ router.get('/attendee=:eventId', function(req, res) {
 	});
 });
 
+//query for all event info of one user
+router.get('/userEvent=:email', function(req, res) {
+	connection.query("SELECT event_id from user WHERE emailAddress = ?", [req.params.email], function (err,result){
+		var eventlist = result[0].event_id;
+		if (eventlist == undefined){
+			var ret = [{"id":-1}];
+			res.send(ret);
+			return;
+		}
+
+		eventlist = eventlist.substring(1, eventlist.length - 1).replace("_", " or id = ");
+		console.log(eventlist);
+
+		connection.query("SELECT * from event WHERE id = " + eventlist, function (err,result){
+			console.log('--------------------------SELECT----------------------------');    
+			console.log(result);       
+			console.log('------------------------------------------------------------\n\n');  
+			res.send(result);
+		});
+	});
+});
+
 module.exports = router;
 
