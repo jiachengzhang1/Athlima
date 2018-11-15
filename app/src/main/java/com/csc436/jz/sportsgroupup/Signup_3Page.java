@@ -1,27 +1,23 @@
 package com.csc436.jz.sportsgroupup;
 
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+
+import com.csc436.jz.sportsgroupup.Tasks.SignupTask;
+import com.csc436.jz.sportsgroupup.Tools.URL;
+
 import java.util.ArrayList;
 
 public class Signup_3Page extends AppCompatActivity {
 
    // private TextView test_view;
     private String email, password, name,  sports, personalStatement, schoolYear;
+    private Signup_3Page signup_3Page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +33,7 @@ public class Signup_3Page extends AppCompatActivity {
         String temp = page2_intent.getStringExtra(Signup_2Page.SCHOOLYEAR);
         if(temp.equals("Freshman"))
             schoolYear = "1";
-        else if (temp.equals("Sophmore"))
+        else if (temp.equals("Sophomore"))
             schoolYear = "2";
         else if (temp.equals("Junior"))
             schoolYear = "3";
@@ -57,6 +53,8 @@ public class Signup_3Page extends AppCompatActivity {
         Button signUpFinalFinish = findViewById(R.id.signUpFinalFinish);
         Button signUpFinalBack = findViewById(R.id.signUpFinalBack);
 
+        signup_3Page = this;
+
         signUpFinalFinish.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -67,8 +65,8 @@ public class Signup_3Page extends AppCompatActivity {
                     personalStatement = " ";
                 }
                 String url = String.format("%s:3000/get/createUser=%s,pwd=%s,readName=%s,ps=%s,preferSport=%s,schoolYear=%s",
-                        com.csc436.jz.sportsgroupup.URL.Address.url, email, password, name, personalStatement, sports, schoolYear);
-                new SignupTask().execute(url);
+                        URL.Address.url, email, password, name, personalStatement, sports, schoolYear);
+                new SignupTask(getApplicationContext(), email, signup_3Page).execute(url);
             }
         } );
 
@@ -82,59 +80,4 @@ public class Signup_3Page extends AppCompatActivity {
             }
         } );
     }
-
-    @SuppressLint("StaticFieldLeak")
-    public class SignupTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            HttpURLConnection connection = null;
-            InputStreamReader inputStreamReader = null;
-
-            try {
-                URL url = new URL(urls[0]);
-
-                connection = (HttpURLConnection) url.openConnection();
-
-                inputStreamReader = new InputStreamReader(connection.getInputStream());
-
-                return "Sign up Successfully!";
-
-            } catch (MalformedURLException e) {
-                return e.toString();
-            } catch (IOException e) {
-                return e.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (connection != null) {
-                    try {
-                        inputStreamReader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    connection.disconnect();
-                }
-            }
-            return "Failed";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-         //   test_view = (TextView) findViewById(R.id.test_view_page3);
-         //   test_view.setText(result);
-
-            // show sign up results
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-
-            // if user sign up successfully, go to login page
-            if (!result.equals("Failed")) {
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(startIntent);
-            }
-        }
-    }
-
 }

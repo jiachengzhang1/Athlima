@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -116,6 +117,7 @@ public class Signup_2Page extends AppCompatActivity {
 
 
 
+
         Button signUp2Next = findViewById(R.id.signup_next);
         Button signUp2Back = findViewById(R.id.signup_back);
         //signUp2Back.setText(page1_intent.getStringExtra(Signup_1Page.EMAIL));
@@ -130,17 +132,22 @@ public class Signup_2Page extends AppCompatActivity {
 
                 int selectedID = radioGroup.getCheckedRadioButtonId();
                 if (selectedID == -1) { // no radio button is chosen
-
+                    Toast.makeText(getApplicationContext(), "Select Your school year", Toast.LENGTH_LONG).show();
                 } else { // one radio button is selected
-                    Intent intent = new Intent(Signup_2Page.this, Signup_3Page.class);
+                    if(sportList.size() != 0) {
+                        Intent intent = new Intent(Signup_2Page.this, Signup_3Page.class);
 
-                    RadioButton selectedRadioButton = (RadioButton) findViewById(selectedID);
-                    String schoolYear = selectedRadioButton.getText().toString();
+                        RadioButton selectedRadioButton = (RadioButton) findViewById(selectedID);
+                        String schoolYear = selectedRadioButton.getText().toString();
 
-                    intent.putExtras(page1_intent.getExtras());
-                    intent.putExtra(SCHOOLYEAR, schoolYear);
-                    intent.putExtra(SPORTLIST, sportList);
-                    startActivity(intent);
+                        intent.putExtras(page1_intent.getExtras());
+                        intent.putExtra(SCHOOLYEAR, schoolYear);
+                        intent.putExtra(SPORTLIST, sportList);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Select at least one sport", Toast.LENGTH_LONG).show();
+                        sportList = new ArrayList<String>();
+                    }
                 }
 
             }
