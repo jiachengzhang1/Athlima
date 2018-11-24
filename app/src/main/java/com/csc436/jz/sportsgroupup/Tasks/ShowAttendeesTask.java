@@ -1,13 +1,24 @@
 package com.csc436.jz.sportsgroupup.Tasks;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.csc436.jz.sportsgroupup.MainPage;
+import com.csc436.jz.sportsgroupup.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,13 +31,17 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
+import static android.support.v4.content.ContextCompat.startActivity;
+
 public class ShowAttendeesTask extends AsyncTask<String, String, String> {
 
     private Context context;
     String a;
+    PopupWindow attendeeScroll;
 
-    public ShowAttendeesTask (Context context) {
+    public ShowAttendeesTask (Context context,  PopupWindow layoutAttendee) {
         this.context = context;
+        this.attendeeScroll = layoutAttendee;
     }
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -84,7 +99,7 @@ public class ShowAttendeesTask extends AsyncTask<String, String, String> {
 
         try {
             myJSONArray = new JSONArray(result);
-            ArrayList<String> attendeeList = new ArrayList();
+            final ArrayList<String> attendeeList = new ArrayList();
             String test = "";
 
             // decoding json object of attendees list
@@ -102,6 +117,33 @@ public class ShowAttendeesTask extends AsyncTask<String, String, String> {
             *
             * */
 
+            View v = View.inflate(context, R.layout.attendees_popup, null);
+            LinearLayout layout = v.findViewById(R.id.attendee_Layout);
+            TextView adder = new TextView(context);
+            for(int i = 0; i < attendeeList.size()-1; i++) {
+                adder.setText(attendeeList.get(i));
+                layout.addView(adder);
+            }
+            attendeeScroll.setContentView(layout);
+ /*           final Dialog attendees = new Dialog(context);
+            attendees.setTitle("People Attending this Event");
+            attendees.setContentView(R.layout.attendees_popup);
+            TextView adder = new TextView(context);
+            for(int i = 0; i < attendeeList.size()-1; i++) {
+                adder.setText(attendeeList.get(i));
+                attendeeScroll.addView(adder);
+            }
+            attendees.show();
+
+            Button close = attendees.findViewById(R.id.attendeeListClose);
+
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    attendees.cancel();
+                }
+            });
+*/
 
             return true;
 

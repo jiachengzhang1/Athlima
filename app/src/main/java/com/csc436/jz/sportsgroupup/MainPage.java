@@ -30,6 +30,7 @@ public class MainPage extends AppCompatActivity
     private ArrayList<Map<String, String>> eventList;
     private CurrentUser currentUser;
     private PopupWindow popupWindow;
+    private LinearLayout layoutAttendee = findViewById(R.id.attendee_Layout);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class MainPage extends AppCompatActivity
 
         // access to the internet in order to get the events information
         String url = URL.Address.url + ":3000/get/searchAllEvent";
-        new GetEventTask(eventList, getApplicationContext(), currentUser, scrollView, popupWindow).execute(url);
+        new GetEventTask(eventList, getApplicationContext(), currentUser, scrollView, popupWindow, layoutAttendee).execute(url);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

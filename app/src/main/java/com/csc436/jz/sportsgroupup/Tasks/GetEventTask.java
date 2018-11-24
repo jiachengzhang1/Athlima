@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,18 +40,21 @@ public class GetEventTask extends AsyncTask<String, String, String> {
     @SuppressLint("StaticFieldLeak")
     private LinearLayout scrollView;
     private PopupWindow popupWindow;
+    private LinearLayout layoutAttendee;
 
     public GetEventTask(ArrayList<Map<String, String>> eventList,
                         Context context,
                         CurrentUser currentUser,
                         LinearLayout scrollView,
-                        PopupWindow popupWindow) {
+                        PopupWindow popupWindow,
+                        LinearLayout layoutAttendee) {
 
         this.context = context;
         this.eventList = eventList;
         this.currentUser = currentUser;
         this.scrollView = scrollView;
         this.popupWindow = popupWindow;
+        this.layoutAttendee = layoutAttendee;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -144,7 +148,7 @@ public class GetEventTask extends AsyncTask<String, String, String> {
                 }
 
                 Button but_coming = new Button(context);
-                but_coming.setText("Who's coming");
+                but_coming.setText("Attendees");
                 but_coming.setHeight(50);
                 but_coming.setWidth(300);
                 but_coming.setX(600);
@@ -173,7 +177,7 @@ public class GetEventTask extends AsyncTask<String, String, String> {
                     public void onClick(View v) {
                         String url = URL.Address.url + ":3000/get/";
                         url = String.format(url + "attendee=%d", v.getId());
-                        new ShowAttendeesTask(context).execute(url);
+                        new ShowAttendeesTask(context,  popupWindow).execute(url);
                     }
                 });
 
