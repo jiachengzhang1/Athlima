@@ -286,7 +286,7 @@ router.get('/userEvent=:email', function(req, res) {
 			return;
 		}
 
-		eventlist = eventlist.substring(1, eventlist.length - 1).replace("_", " or id = ");
+		eventlist = eventlist.substring(1, eventlist.length - 1).replace(/_/g, " or id = ");
 		console.log(eventlist);
 
 		connection.query("SELECT * from event WHERE id = " + eventlist, function (err,result){
