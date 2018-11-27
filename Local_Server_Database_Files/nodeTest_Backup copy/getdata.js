@@ -158,14 +158,14 @@ router.get('/createUser=:username,pwd=:pwd,readName=:name,ps=:ps,preferSport=:pr
 });
 
 //create a new event
-router.get('/createEvent=:eventname,date=:date,time=:time,location=:loc,skill=:skill,description=:des,teamSize=:tsize, ownerUserId:=owner', function(req,res){
-	connection.query("INSERT INTO event (name,date,time,location,skill,description,teamSize,owner) VALUES (?,?,?,?,?,?,?,?)",
+router.get('/createEvent=:eventname,date=:date,time=:time,location=:loc,skill=:skill,description=:des,teamSize=:tsize,ownerUserId=:owner', function(req,res){
+	connection.query("INSERT INTO event (name,date,time,location,skill,description,teamSize,ownerUserId) VALUES (?,?,?,?,?,?,?,?)",
 		[req.params.eventname, req.params.date, req.params.time, req.params.loc, req.params.skill, req.params.des, req.params.tsize, req.params.owner],
 		function(err, result){
 			var checkStatus = {"boolean":true};
 	 		if(err){
 				console.log("ERROR:", err.message);
-				checkStatus = {"boolean":false};
+				checkStatus = {"boolean":false};	
 				res.send(checkStatus);
 				return;
 			}
