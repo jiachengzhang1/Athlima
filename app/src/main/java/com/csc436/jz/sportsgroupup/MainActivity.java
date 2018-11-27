@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.csc436.jz.sportsgroupup.Tasks.SigninTask;
 import com.csc436.jz.sportsgroupup.Tools.Password_Hash;
@@ -38,14 +39,21 @@ public class MainActivity extends AppCompatActivity {
                 username = findViewById(R.id.usernameText);
                 password = findViewById(R.id.passwordText);
                 String username_str = username.getText().toString();
-                String password_str = Password_Hash.SHA1(password.getText().toString());
+                String password_str = password.getText().toString();
 
-                startIntent = new Intent(getApplicationContext(), MainPage.class);
+                if(username_str.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Email cannot be empty.", Toast.LENGTH_LONG).show();
+                } else if(password_str.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Password cannot be empty.", Toast.LENGTH_LONG).show();
+                } else {
 
-                // verifying and getting user information
-                String url = String.format("%s:3000/get/loginUserName=%s,pwd=%s",
-                        URL.Address.url, username_str,password_str);
-                new SigninTask(getApplicationContext(), startIntent, mainActivity).execute(url);
+                    startIntent = new Intent(getApplicationContext(), MainPage.class);
+
+                    // verifying and getting user information
+                    String url = String.format("%s:3000/get/loginUserName=%s,pwd=%s",
+                            URL.Address.url, username_str, Password_Hash.SHA1(password.getText().toString()));
+                    new SigninTask(getApplicationContext(), startIntent, mainActivity).execute(url);
+                }
 
             }
         });

@@ -1,8 +1,11 @@
 package com.csc436.jz.sportsgroupup;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,8 +14,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.view.ViewGroup.LayoutParams;
 
 import com.csc436.jz.sportsgroupup.Tasks.GetEventTask;
 import com.csc436.jz.sportsgroupup.Tools.CurrentUser;
@@ -30,7 +37,6 @@ public class MainPage extends AppCompatActivity
     private ArrayList<Map<String, String>> eventList;
     private CurrentUser currentUser;
     private PopupWindow popupWindow;
-    private LinearLayout layoutAttendee = findViewById(R.id.attendee_Layout);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +47,38 @@ public class MainPage extends AppCompatActivity
 
         signInPage_intent = getIntent();
 
-        ArrayList<String> userInfo = signInPage_intent.getStringArrayListExtra(MainActivity.USERINFO);
+        currentUser = (CurrentUser) signInPage_intent.getSerializableExtra(MainActivity.USERINFO);
 
-        currentUser = new CurrentUser(Integer.parseInt(userInfo.get(0)),
-                userInfo.get(1), // email
-                Integer.parseInt(userInfo.get(3)), // school year
-                userInfo.get(4), // sport
-                userInfo.get(5), // statement
-                userInfo.get(6)); // name
 
         LinearLayout scrollView = findViewById(R.id.scrollViewMain);
+        LinearLayout layoutAttendee = findViewById(R.id.attendee_Layout);
+        LayoutInflater inflater = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.custom_layout,null);
+        popupWindow = new PopupWindow(customView,
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT);
+
+        if(Build.VERSION.SDK_INT>=21){
+            popupWindow.setElevation(5.0f);
+        }
+
+        // set action for close button of popup windown
+        ImageButton closeButton = customView.findViewById(R.id.ib_close);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Dismiss the popup window
+                popupWindow.dismiss();
+            }
+        });
+
+        // parent view of the popup window
+        RelativeLayout mRelativeLayout;
+        mRelativeLayout = findViewById(R.id.rl);
 
         // access to the internet in order to get the events information
         String url = URL.Address.url + ":3000/get/searchAllEvent";
-        new GetEventTask(eventList, getApplicationContext(), currentUser, scrollView, popupWindow, layoutAttendee).execute(url);
+        new GetEventTask(eventList, getApplicationContext(), currentUser, scrollView, popupWindow, layoutAttendee, mRelativeLayout).execute(url);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -105,6 +129,7 @@ public class MainPage extends AppCompatActivity
         if (id == R.id.nav_user) {
             Intent startIntent = new Intent(getApplicationContext(), UserPage.class);
             startIntent.putExtra(USER, currentUser);
+           // startIntent.addFlags(1);
             startActivity(startIntent);
         } else if (id == R.id.nav_myEvents) {
             Intent startIntent = new Intent(getApplicationContext(), MyEventsPage.class);
@@ -113,7 +138,9 @@ public class MainPage extends AppCompatActivity
         } else if (id == R.id.nav_createEvent) {
             createEvent();
         } else if (id == R.id.nav_setting) {
-
+            Intent startIntent = new Intent(getApplicationContext(), Settings.class);
+            //startIntent.putExtra()
+            startActivity(startIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -123,6 +150,7 @@ public class MainPage extends AppCompatActivity
 
     private void createEvent () {
         Intent startIntent = new Intent(getApplicationContext(), CreateEventPage.class);
+        startIntent.putExtra(USER, currentUser);
         startActivity(startIntent);
     }
 

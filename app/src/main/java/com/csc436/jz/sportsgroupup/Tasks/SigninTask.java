@@ -10,6 +10,7 @@ import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
 import com.csc436.jz.sportsgroupup.MainActivity;
+import com.csc436.jz.sportsgroupup.Tools.CurrentUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +39,7 @@ public class SigninTask extends AsyncTask<String, String, String> {
     private Intent intent;
     private MainActivity mainActivity;
 
-    public SigninTask (Context context, Intent intent, MainActivity mainActivity) {
+    public SigninTask(Context context, Intent intent, MainActivity mainActivity) {
         this.context = context;
         this.intent = intent;
         this.mainActivity = mainActivity;
@@ -83,54 +84,55 @@ public class SigninTask extends AsyncTask<String, String, String> {
                 connection.disconnect();
             }
         }
-        return "-1";
+        return null;
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         boolean loadUser = verifyAndGetUserInfo(result);
+
         if (loadUser) {
-            Toast.makeText(context, "Login Successfully", Toast.LENGTH_LONG).show();
             mainActivity.startActivity(intent);
-        } else {
-            Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
         }
+
     }
 
-    private boolean verifyAndGetUserInfo (String result) {
-        boolean status = false;
+    private boolean verifyAndGetUserInfo(String result) {
         if (result != null) {
-            if (result == "") {}
-            else {
-                // decoding json object
-                JSONArray myJSONArray = null;
-                try {
-                    myJSONArray = new JSONArray(result);
-                    JSONObject object = new JSONObject(myJSONArray.get(0).toString());
 
-                    ArrayList<String> userInfo = new ArrayList<String>();
-
-                    userInfo.add(object.getString("id"));
-                    userInfo.add(object.getString("emailAddress"));
-                    userInfo.add(object.getString("password"));
-                    userInfo.add(object.getString("schoolYear"));
-                    userInfo.add(object.getString("prefer_sport"));
-                    userInfo.add(object.getString("ps"));
-                    userInfo.add(object.getString("readName"));
-
-                    // share data to next activity and jump to the next page
-                    intent.putExtra(MainActivity.USERINFO, userInfo);
-
-                    status = true;
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            // decoding json object
+            JSONArray myJSONArray = null;
+            try {
+                myJSONArray = new JSONArray(result);
+                if(myJSONArray.length() < 1) {
+                    Toast.makeText(context, "Account doesn't match the record.", Toast.LENGTH_LONG).show();
+                    return false;
                 }
-            }
+                JSONObject object = new JSONObject(myJSONArray.get(0).toString());
 
-        } else { }
-        return status;
+                CurrentUser currentUser = new CurrentUser(Integer.parseInt(object.getString("id")),
+                        object.getString("emailAddress"), // email
+                        Integer.parseInt(object.getString("schoolYear")), // school year
+                        object.getString("prefer_sport"), // sport
+                        object.getString("ps"), // statement
+                        object.getString("readName")); // name
+
+                // share data to next activity and jump to the next page
+                intent.putExtra(MainActivity.USERINFO, currentUser);
+                Toast.makeText(context, "Login Successfully", Toast.LENGTH_LONG).show();
+                return true;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Toast.makeText(context, "Account doesn't match the record.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        Toast.makeText(context, "Server Error.", Toast.LENGTH_LONG).show();
+        return false;
     }
 
 }

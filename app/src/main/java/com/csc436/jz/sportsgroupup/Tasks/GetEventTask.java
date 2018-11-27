@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,13 +42,15 @@ public class GetEventTask extends AsyncTask<String, String, String> {
     private LinearLayout scrollView;
     private PopupWindow popupWindow;
     private LinearLayout layoutAttendee;
+    private RelativeLayout mRelativeLayout;
 
     public GetEventTask(ArrayList<Map<String, String>> eventList,
                         Context context,
                         CurrentUser currentUser,
                         LinearLayout scrollView,
                         PopupWindow popupWindow,
-                        LinearLayout layoutAttendee) {
+                        LinearLayout layoutAttendee,
+                        RelativeLayout mRelativeLayout) {
 
         this.context = context;
         this.eventList = eventList;
@@ -55,6 +58,7 @@ public class GetEventTask extends AsyncTask<String, String, String> {
         this.scrollView = scrollView;
         this.popupWindow = popupWindow;
         this.layoutAttendee = layoutAttendee;
+        this.mRelativeLayout = mRelativeLayout;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -114,7 +118,7 @@ public class GetEventTask extends AsyncTask<String, String, String> {
             myJSONArray = new JSONArray(result);
             eventList = new ArrayList<>();
 
-            for(int i = 0; i<myJSONArray.length(); i++) {
+            for(int i = myJSONArray.length()-1; i>=0; i--) {
                 JSONObject object = new JSONObject(myJSONArray.get(i).toString());
 
                 // a map for each event
@@ -166,7 +170,6 @@ public class GetEventTask extends AsyncTask<String, String, String> {
                         String url = URL.Address.url + ":3000/get/";
                         url = String.format(url + "joinEvent=%d,user=%s", v.getId(), currentUser.getCurrentUserEmail());
                         new JoinTask(context).execute(url);
-
                     }
                 });
 
@@ -177,27 +180,24 @@ public class GetEventTask extends AsyncTask<String, String, String> {
                     public void onClick(View v) {
                         String url = URL.Address.url + ":3000/get/";
                         url = String.format(url + "attendee=%d", v.getId());
-                        new ShowAttendeesTask(context,  popupWindow).execute(url);
+                        new ShowAttendeesTask(context, popupWindow,mRelativeLayout).execute(url);
                     }
                 });
 
                 TextView title = new TextView(context);
                 title.setText("Title: " + eventList.get(i).get("title") +
                         "\nDate: " + eventList.get(i).get("date") +
-                        "\nLocation: " + eventList.get(i).get("Location") +
-                        "\nDescription: " + eventList.get(i).get("Description") +"\n\n");
+                        "\nLocation: " + eventList.get(i).get("location") +
+                        "\nDescription: " + eventList.get(i).get("description") +"\n\n");
 
                 title.setX(20);
 
                 Map<String, String> temp = eventList.get(i);
-                int eventID = -1;
 
                 if (temp != null && temp.get("id") != null) {
-                    eventID = Integer.parseInt(temp.get("id"));
                     textAdd.addView(title, param);
                     textAdd.addView(but_join);
                     textAdd.addView(but_coming);
-                    final int finalEventID = eventID;
 
 
                     scrollView.addView(textAdd, param);

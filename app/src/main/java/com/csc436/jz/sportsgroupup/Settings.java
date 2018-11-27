@@ -17,6 +17,7 @@ public class Settings extends AppCompatActivity {
         Button red = findViewById(R.id.redColor);
         Button blue = findViewById(R.id.blueColor);
         Button white = findViewById(R.id.defaultColor);
+        Button back = findViewById(R.id.setting_back);
         final ConstraintLayout settingsLayout = findViewById(R.id.settingsLayout);
 
 
@@ -44,6 +45,13 @@ public class Settings extends AppCompatActivity {
             public void onClick(View v){
 
                 settingsLayout.setBackgroundColor(Color.BLUE);
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

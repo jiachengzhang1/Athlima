@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 
 public class UserPage extends AppCompatActivity {
 
+    private CurrentUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +28,7 @@ public class UserPage extends AppCompatActivity {
 
         Intent userInfo_intent = getIntent();
 
-        CurrentUser user = (CurrentUser) userInfo_intent.getSerializableExtra(MainPage.USER);
+        user = (CurrentUser) userInfo_intent.getSerializableExtra(MainPage.USER);
 
         // userInfo list, id, email, password, school year, sport, statement
         ArrayList<String> userInfo = userInfo_intent.getStringArrayListExtra(MainActivity.USERINFO);
@@ -44,6 +48,28 @@ public class UserPage extends AppCompatActivity {
         email.setText(user.getCurrentUserEmail());
         statement.setText(user.getStatement());
         schoolYear.setText(user.getSchoolYear());
+
+        Button back, logout;
+
+        back = findViewById(R.id.userPage_back);
+        logout = findViewById(R.id.user_logout);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user = null;
+                finish();
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(startIntent);
+            }
+        });
 
     }
 
