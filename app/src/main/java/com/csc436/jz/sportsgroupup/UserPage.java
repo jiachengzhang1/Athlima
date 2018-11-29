@@ -65,9 +65,10 @@ public class UserPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 user = null;
-                finish();
+
                 Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(startIntent);
+                finish();
             }
         });
 

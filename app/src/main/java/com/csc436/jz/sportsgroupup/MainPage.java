@@ -63,7 +63,7 @@ public class MainPage extends AppCompatActivity
         }
 
         // set action for close button of popup windown
-        ImageButton closeButton = customView.findViewById(R.id.ib_close);
+        Button closeButton = customView.findViewById(R.id.ib_close);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

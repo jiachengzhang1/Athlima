@@ -113,7 +113,7 @@ public class ShowAttendeesTask extends AsyncTask<String, String, String> {
                 JSONObject object = new JSONObject(myJSONArray.get(i).toString());
                 Button but_attendee = new Button(context);
                // attendeeList.add(object.getString("readName"));
-                att += object.getString("readName");
+                att += object.getString("readName")+"\n";
             }
 
 
@@ -128,7 +128,6 @@ public class ShowAttendeesTask extends AsyncTask<String, String, String> {
             TextView textView = attendeeScroll.getContentView().findViewById(R.id.tv);
 
             textView.setText(att);
-
             attendeeScroll.showAtLocation(mRelativeLayout, Gravity.CENTER,0,0);
 
             return true;

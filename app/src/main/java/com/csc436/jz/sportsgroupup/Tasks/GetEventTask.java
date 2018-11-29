@@ -3,6 +3,8 @@ package com.csc436.jz.sportsgroupup.Tasks;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -137,15 +139,26 @@ public class GetEventTask extends AsyncTask<String, String, String> {
             }
 
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
             for (int i = 0; i < eventList.size(); i++) {
-                ConstraintLayout textAdd = new ConstraintLayout(context);
+                //ConstraintLayout textAdd = new ConstraintLayout(context);
+                GradientDrawable border = new GradientDrawable();
+                border.setColor(0xFFFFFFFF); //white background
+                border.setStroke(1, Color.LTGRAY); //black border with full opacity
+
+                LinearLayout textAdd = new LinearLayout(context);
+                textAdd.setOrientation(LinearLayout.VERTICAL);
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    textAdd.setBackgroundDrawable(border);
+                } else {
+                    textAdd.setBackground(border);
+                }
+                textAdd.setPadding(1,10,1,3);
 
                 Button but_join = new Button(context);
                 but_join.setText("Join");
                 but_join.setHeight(50);
                 but_join.setWidth(300);
-                but_join.setX(600);
-                but_join.setY(100);
                 String id_str = eventList.get(i).get("id");
                 if(id_str != null) {
                     but_join.setId(Integer.parseInt(id_str));
@@ -155,12 +168,9 @@ public class GetEventTask extends AsyncTask<String, String, String> {
                 but_coming.setText("Attendees");
                 but_coming.setHeight(50);
                 but_coming.setWidth(300);
-                but_coming.setX(600);
-                but_coming.setY(0);
                 if(id_str != null) {
                     but_coming.setId(Integer.parseInt(id_str));
                 }
-
 
                 but_join.setOnClickListener(new View.OnClickListener() {
                     @SuppressLint("DefaultLocale")
@@ -188,9 +198,10 @@ public class GetEventTask extends AsyncTask<String, String, String> {
                 title.setText("Title: " + eventList.get(i).get("title") +
                         "\nDate: " + eventList.get(i).get("date") +
                         "\nLocation: " + eventList.get(i).get("location") +
-                        "\nDescription: " + eventList.get(i).get("description") +"\n\n");
+                        "\nDescription: " + eventList.get(i).get("description"));
 
                 title.setX(20);
+                title.setTextColor(Color.BLACK);
 
                 Map<String, String> temp = eventList.get(i);
 

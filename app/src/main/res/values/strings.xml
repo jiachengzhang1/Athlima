@@ -5,6 +5,9 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_events">Events</string>
     <string name="title_home">Home</string>
+    <string name="title_account">Account</string>
+    <string name="title_my_events">My Events</string>
+    <string name="title_setting">Setting</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="navigation_drawer_open">Drawer Open</string>
@@ -99,4 +102,13 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_main">Main</string>
+    <string name="title_activity_navigation">Navigation</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
 </resources>

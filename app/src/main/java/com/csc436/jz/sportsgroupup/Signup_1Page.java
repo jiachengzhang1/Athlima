@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.csc436.jz.sportsgroupup.Tools.Password_Hash;
@@ -21,8 +21,8 @@ public class Signup_1Page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_1_page);
 
-        Button signUpNext = findViewById(R.id.signup_Next);
-        Button signUpBack = findViewById(R.id.signup_back);
+        ImageButton signUpNext = findViewById(R.id.signup1_Next);
+        ImageButton signUpBack = findViewById(R.id.signup1_back);
 
         signUpNext.setOnClickListener(new View.OnClickListener() {
 
@@ -70,9 +70,7 @@ public class Signup_1Page extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(startIntent);
+                finish();
             }
         });
 

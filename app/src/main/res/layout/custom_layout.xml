@@ -1,29 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_custom_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#F08080"
-
+    android:background="@drawable/custom_layout_bg"
     android:fadingEdge="horizontal|vertical"
     android:padding="2dp">
 
-    <ImageButton
-        android:id="@+id/ib_close"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="@null"
-        android:src="@drawable/close" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:padding="2dp"
-        android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="24dp"
+            android:lineSpacingExtra="8sp"
+            android:padding="2dp"
+            android:text="test\na"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/ib_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_button"
+            android:text="Cancel"
+
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
 </RelativeLayout>

@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -24,9 +24,6 @@ public class Signup_2Page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         final Intent page1_intent = getIntent();
-        String email = page1_intent.getStringExtra(Signup_1Page.EMAIL);
-        String password = page1_intent.getStringExtra(Signup_1Page.PASSWORD);
-        String name = page1_intent.getStringExtra(Signup_1Page.NAME);
 
         setContentView(R.layout.activity_signup_2_page);
 
@@ -118,8 +115,8 @@ public class Signup_2Page extends AppCompatActivity {
 
 
 
-        Button signUp2Next = findViewById(R.id.signup_next);
-        Button signUp2Back = findViewById(R.id.signup_back);
+        ImageButton signUp2Next = findViewById(R.id.signup2_next);
+        ImageButton signUp2Back = findViewById(R.id.signup2_back);
         //signUp2Back.setText(page1_intent.getStringExtra(Signup_1Page.EMAIL));
 
         final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.signup_radiogroup);
@@ -137,7 +134,7 @@ public class Signup_2Page extends AppCompatActivity {
                     if(sportList.size() != 0) {
                         Intent intent = new Intent(Signup_2Page.this, Signup_3Page.class);
 
-                        RadioButton selectedRadioButton = (RadioButton) findViewById(selectedID);
+                        RadioButton selectedRadioButton = findViewById(selectedID);
                         String schoolYear = selectedRadioButton.getText().toString();
 
                         intent.putExtras(page1_intent.getExtras());
@@ -146,7 +143,7 @@ public class Signup_2Page extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         Toast.makeText(getApplicationContext(), "Select at least one sport", Toast.LENGTH_LONG).show();
-                        sportList = new ArrayList<String>();
+                        sportList = new ArrayList<>();
                     }
                 }
 

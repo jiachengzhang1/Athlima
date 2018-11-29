@@ -7,22 +7,22 @@
         <item
             android:layout_marginTop="8dp"
             android:id="@+id/nav_user"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_account_circle_24px"
             android:title="User" />
         <item
             android:layout_marginTop="8dp"
             android:id="@+id/nav_myEvents"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_event_24px"
             android:title="My Events" />
         <item
             android:layout_marginTop="8dp"
             android:id="@+id/nav_createEvent"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_baseline_add_box_24px"
             android:title="Creating Event" />
         <item
             android:layout_marginTop="8dp"
             android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_settings_20px"
             android:title="Setting" />
 
     </group>

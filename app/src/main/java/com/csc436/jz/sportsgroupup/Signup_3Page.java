@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.csc436.jz.sportsgroupup.Tasks.SignupTask;
 import com.csc436.jz.sportsgroupup.Tools.URL;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Signup_3Page extends AppCompatActivity {
 
-   // private TextView test_view;
+    // private TextView test_view;
     private String email, password, name,  sports, personalStatement, schoolYear;
     private Signup_3Page signup_3Page;
 
@@ -50,8 +50,8 @@ public class Signup_3Page extends AppCompatActivity {
         }
 
         // two buttons for jump back or next
-        Button signUpFinalFinish = findViewById(R.id.signUpFinalFinish);
-        Button signUpFinalBack = findViewById(R.id.signUpFinalBack);
+        ImageButton signUpFinalFinish = findViewById(R.id.signUpFinalFinish);
+        ImageButton signUpFinalBack = findViewById(R.id.signUpFinalBack);
 
         signup_3Page = this;
 
